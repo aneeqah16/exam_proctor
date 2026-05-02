@@ -5,6 +5,10 @@ from flask_login import LoginManager
 
 db = SQLAlchemy()
 login_manager = LoginManager()
+@login_manager.user_loader
+def load_user(user_id):
+    from app.models import Admin
+    return Admin.query.get(int(user_id))
 
 
 def create_app():
@@ -20,7 +24,20 @@ def create_app():
     login_manager.login_message_category = "warning"
 
 
+    # with app.app_context():
+    #     db.create_all()
+
+
+
     with app.app_context():
+        from app.models import Admin
         db.create_all()
 
+        # Seed default admin
+        if not Admin.query.first():
+            admin = Admin(username="admin")
+            admin.set_password("admin123")
+            db.session.add(admin)
+            db.session.commit()
+            print("Default admin created — username: admin | password: admin123")
     return app
