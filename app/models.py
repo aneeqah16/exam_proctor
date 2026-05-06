@@ -12,6 +12,9 @@ class Admin(UserMixin, db.Model):
     password_hash = db.Column(db.String(256), nullable=False)
     created_at    = db.Column(db.DateTime, default=datetime.utcnow)
 
+    exams = db.relationship("Exam", backref="creator", lazy=True,
+                            cascade="all, delete-orphan")
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -70,7 +73,7 @@ class Question(db.Model):
     correct_answer = db.Column(db.String(1), nullable=False)
 
     def __repr__(self):
-        return f"<Question {self.question_text[:50]}...>"
+        return f"<Question {self.id}>"
 
 
 class Attempt(db.Model):
@@ -88,8 +91,7 @@ class Attempt(db.Model):
                                     cascade="all, delete-orphan")
 
     def __repr__(self):
-        return f"<Attempt {self.student_id} - {self.exam_id}>"
-
+        return f"<Attempt {self.id}>"
 
 
 class ActivityLog(db.Model):
@@ -101,6 +103,4 @@ class ActivityLog(db.Model):
     timestamp  = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return f"<ActivityLog {self.event_type} - {self.timestamp}>"
-
-
+        return f"<ActivityLog {self.event_type}>"
