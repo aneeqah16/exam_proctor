@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Create Exam — ExamProctor{% endblock %}
+
+{% block body %}
+<div class="container py-5" style="max-width:600px">
+    <div class="card shadow-sm" style="border-top:4px solid #1A5C52">
+        <div class="card-body p-4">
+            <h5 class="section-heading">Create New Exam</h5>
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Exam Title</label>
+                    <input type="text" name="title" class="form-control"
+                           placeholder="e.g. Computer Networks Midterm" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Duration (minutes)</label>
+                    <input type="number" name="duration" class="form-control"
+                           placeholder="e.g. 60" min="5" max="300" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Scheduled Date & Time</label>
+                    <input type="datetime-local" name="scheduled_at" class="form-control">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Status</label>
+                    <select name="status" class="form-select">
+                        <option value="draft">Draft</option>
+                        <option value="scheduled">Scheduled</option>
+                        <option value="active">Active</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-teal px-4">Create Exam</button>
+                    <a href="{{ url_for('admin.exams') }}"
+                       class="btn btn-outline-secondary px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

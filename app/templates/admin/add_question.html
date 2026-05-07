@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Add Question — ExamProctor{% endblock %}
+
+{% block body %}
+<div class="container py-5" style="max-width:640px">
+    <div class="card shadow-sm" style="border-top:4px solid #A06A00">
+        <div class="card-body p-4">
+            <h5 class="section-heading">Add Question to "{{ exam.title }}"</h5>
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Question Text</label>
+                    <textarea name="question_text" class="form-control" rows="3"
+                              placeholder="Write the question here..." required></textarea>
+                </div>
+                {% for opt in ['A', 'B', 'C', 'D'] %}
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Option {{ opt }}</label>
+                    <input type="text" name="option_{{ opt | lower }}"
+                           class="form-control" placeholder="Option {{ opt }}" required>
+                </div>
+                {% endfor %}
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Correct Answer</label>
+                    <select name="correct_answer" class="form-select" required>
+                        {% for opt in ['A', 'B', 'C', 'D'] %}
+                        <option value="{{ opt }}">Option {{ opt }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-teal px-4">Add Question</button>
+                    <a href="{{ url_for('admin.questions', exam_id=exam.id) }}"
+                       class="btn btn-outline-secondary px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

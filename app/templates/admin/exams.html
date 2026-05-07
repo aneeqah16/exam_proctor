@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Exams — ExamProctor{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 sidebar py-3 d-none d-md-block">
+            <div class="text-white fw-bold px-3 mb-4" style="font-size:1.1rem">⬡ ExamProctor</div>
+            <ul class="nav flex-column">
+                <li><a href="{{ url_for('admin.dashboard') }}" class="nav-link">⊞ Dashboard</a></li>
+                <li><a href="{{ url_for('admin.exams') }}"     class="nav-link active">📋 Exams</a></li>
+                <li><a href="{{ url_for('auth.logout') }}"     class="nav-link text-danger mt-5">⏻ Logout</a></li>
+            </ul>
+        </nav>
+        <main class="col-md-10 px-4 py-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="section-heading mb-0">All Exams</h5>
+                <a href="{{ url_for('admin.create_exam') }}" class="btn btn-teal">+ Create Exam</a>
+            </div>
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th><th>Duration</th><th>Scheduled</th>
+                                <th>Questions</th><th>Status</th><th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for e in exams %}
+                            <tr>
+                                <td class="fw-semibold">{{ e.title }}</td>
+                                <td>{{ e.duration }} min</td>
+                                <td class="small text-muted">
+                                    {{ e.scheduled_at.strftime('%d %b %Y, %I:%M %p') if e.scheduled_at else '—' }}
+                                </td>
+                                <td>{{ e.questions | length }}</td>
+                                <td>
+                                    <span class="badge
+                                        {% if e.status == 'scheduled' %}bg-success
+                                        {% elif e.status == 'active' %}bg-warning text-dark
+                                        {% elif e.status == 'closed' %}bg-secondary
+                                        {% else %}bg-light text-dark border{% endif %}">
+                                        {{ e.status }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('admin.questions', exam_id=e.id) }}"
+                                       class="btn btn-sm btn-outline-secondary me-1">Questions</a>
+                                    <a href="{{ url_for('admin.edit_exam', exam_id=e.id) }}"
+                                       class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                                    <form method="POST"
+                                          action="{{ url_for('admin.delete_exam', exam_id=e.id) }}"
+                                          class="d-inline"
+                                          onsubmit="return confirm('Delete this exam?')">
+                                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">
+                                    No exams yet.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

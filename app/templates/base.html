@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ExamProctor{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --teal: #1A5C52;
+            --rust: #B5451B;
+            --gray-bg: #F7F3EE;
+        }
+        body { background: var(--gray-bg); }
+        .sidebar {
+            min-height: 100vh;
+            background: #12403A;
+        }
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.75);
+            padding: 0.7rem 1.2rem;
+            border-radius: 6px;
+            margin: 2px 8px;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background: var(--teal);
+            color: white;
+            border-left: 3px solid var(--rust);
+        }
+        .section-heading {
+            color: var(--teal);
+            font-weight: 700;
+            border-bottom: 2px solid #E8F2F0;
+            padding-bottom: 0.4rem;
+        }
+        .btn-teal {
+            background: var(--teal);
+            color: white;
+            border: none;
+        }
+        .btn-teal:hover { background: #144a41; color: white; }
+        .btn-rust {
+            background: var(--rust);
+            color: white;
+            border: none;
+        }
+        .btn-rust:hover { background: #8f3614; color: white; }
+    </style>
+</head>
+<body>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="position-fixed top-0 end-0 p-3" style="z-index:9999">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible shadow" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+{% block body %}{% endblock %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
