@@ -2,103 +2,130 @@
 {% block title %}Dashboard — ExamProctor{% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-    <div class="row">
+<div class="app-wrapper">
 
-        <!-- Sidebar -->
-        <nav class="col-md-2 sidebar py-3 d-none d-md-block">
-            <div class="text-white fw-bold px-3 mb-4" style="font-size:1.1rem">
-                ⬡ ExamProctor
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-name">
+                <i class="bi bi-shield-check me-2"></i>ExamProctor
             </div>
-            <ul class="nav flex-column">
-                <li><a href="{{ url_for('admin.dashboard') }}" class="nav-link active">⊞ Dashboard</a></li>
-                <li><a href="{{ url_for('admin.exams') }}"     class="nav-link">📋 Exams</a></li>
-                <li>
-                    <a href="{{ url_for('auth.logout') }}"
-                       class="nav-link text-danger mt-5">⏻ Logout</a>
-                </li>
-            </ul>
+            <div class="brand-sub">Admin Panel</div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-label">Main</div>
+            <a href="{{ url_for('admin.dashboard') }}"
+               class="nav-link active">
+                <i class="bi bi-grid-1x2"></i> Dashboard
+            </a>
+            <a href="{{ url_for('admin.exams') }}"
+               class="nav-link">
+                <i class="bi bi-journal-text"></i> Exams
+            </a>
+
+            <div class="nav-label mt-2">Students</div>
+            <a href="{{ url_for('student.enter_exam') }}"
+               class="nav-link">
+                <i class="bi bi-person-badge"></i> Student Entry
+            </a>
         </nav>
 
-        <!-- Main content -->
-        <main class="col-md-10 px-4 py-4">
+        <div class="sidebar-footer">
+            <a href="{{ url_for('auth.logout') }}" class="nav-link">
+                <i class="bi bi-box-arrow-left"></i> Logout
+            </a>
+        </div>
+    </aside>
 
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="section-heading mb-0">Dashboard Overview</h5>
-                <span class="text-muted small">
-                    Welcome, <b>{{ current_user.username }}</b>
-                </span>
+    <!-- Main -->
+    <div class="main-content">
+
+        <!-- Topbar -->
+        <div class="topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button id="sidebarToggle" class="sidebar-toggle">
+                    <i class="bi bi-list"></i>
+                </button>
+                <span class="topbar-title">Dashboard</span>
+            </div>
+        </div>
+
+        <!-- Page body -->
+        <div class="page-body">
+
+            <div class="page-header">
+                <h4>Overview</h4>
+                <p>Monitor exams, students, and suspicious activity</p>
             </div>
 
             <!-- Stat cards -->
             <div class="row g-3 mb-4">
                 <div class="col-sm-6 col-xl-3">
-                    <div class="card shadow-sm h-100"
-                         style="border-left:5px solid #1A5C52">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="fs-2 fw-bold" style="color:#1A5C52">
-                                    {{ total_exams }}
-                                </div>
-                                <div class="text-muted small">Total Exams</div>
+                    <div class="stat-card">
+                        <div class="stat-icon teal">
+                            <i class="bi bi-journal-text"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" style="color:#1A5C52">
+                                {{ total_exams }}
                             </div>
-                            <span style="font-size:2rem">📋</span>
+                            <div class="stat-label">Total Exams</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3">
-                    <div class="card shadow-sm h-100"
-                         style="border-left:5px solid #B5451B">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="fs-2 fw-bold" style="color:#B5451B">
-                                    {{ total_students }}
-                                </div>
-                                <div class="text-muted small">Total Students</div>
+                    <div class="stat-card">
+                        <div class="stat-icon rust">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" style="color:#B5451B">
+                                {{ total_students }}
                             </div>
-                            <span style="font-size:2rem">👤</span>
+                            <div class="stat-label">Total Students</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3">
-                    <div class="card shadow-sm h-100"
-                         style="border-left:5px solid #1A5C52">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="fs-2 fw-bold" style="color:#1A5C52">
-                                    {{ total_attempts }}
-                                </div>
-                                <div class="text-muted small">Total Attempts</div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="bi bi-bar-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" style="color:#5B3FA0">
+                                {{ total_attempts }}
                             </div>
-                            <span style="font-size:2rem">📊</span>
+                            <div class="stat-label">Total Attempts</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6 col-xl-3">
-                    <div class="card shadow-sm h-100"
-                         style="border-left:5px solid #7B1A1A">
-                        <div class="card-body d-flex justify-content-between align-items-center">
-                            <div>
-                                <div class="fs-2 fw-bold" style="color:#7B1A1A">
-                                    {{ flagged }}
-                                </div>
-                                <div class="text-muted small">Flagged Attempts</div>
+                    <div class="stat-card">
+                        <div class="stat-icon maroon">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <div class="stat-value" style="color:#7B1A1A">
+                                {{ flagged }}
                             </div>
-                            <span style="font-size:2rem">🚨</span>
+                            <div class="stat-label">Flagged Attempts</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Recent attempts -->
-            <div class="card shadow-sm">
-                <div class="card-header text-white fw-bold"
-                     style="background:#1A5C52">
-                    Recent Exam Attempts
+            <div class="ep-card">
+                <div class="ep-card-header">
+                    <h6>
+                        <i class="bi bi-clock-history"></i>
+                        Recent Attempts
+                    </h6>
                 </div>
-                <div class="card-body p-0">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-light">
+                <div class="table-responsive">
+                    <table class="ep-table">
+                        <thead>
                             <tr>
                                 <th>Student</th>
                                 <th>Exam</th>
@@ -111,42 +138,47 @@
                         <tbody>
                             {% for a in recent_attempts %}
                             {% if a.suspicion_score < 10 %}
-                                {% set sus = "Low" %}
-                                {% set sus_bg = "#D4EDDA" %}
-                                {% set sus_color = "#1A6B3C" %}
+                                {% set sus = "low" %}
+                                {% set sus_label = "Low" %}
                             {% elif a.suspicion_score < 25 %}
-                                {% set sus = "Medium" %}
-                                {% set sus_bg = "#FFF3CD" %}
-                                {% set sus_color = "#856404" %}
+                                {% set sus = "medium" %}
+                                {% set sus_label = "Medium" %}
                             {% else %}
-                                {% set sus = "High" %}
-                                {% set sus_bg = "#FDECEA" %}
-                                {% set sus_color = "#7B1A1A" %}
+                                {% set sus = "high" %}
+                                {% set sus_label = "High" %}
                             {% endif %}
                             <tr>
-                                <td>{{ a.student.name }}</td>
-                                <td>{{ a.exam.title }}</td>
-                                <td>{{ a.score }}</td>
                                 <td>
-                                    <span class="badge px-2 py-1"
-                                          style="background:{{ sus_bg }};color:{{ sus_color }}">
-                                        {{ sus }}
+                                    <div class="fw-500">{{ a.student.name }}</div>
+                                    <div class="text-muted" style="font-size:0.75rem">
+                                        {{ a.student.roll_number }}
+                                    </div>
+                                </td>
+                                <td>{{ a.exam.title }}</td>
+                                <td class="fw-600">{{ a.score }}</td>
+                                <td>
+                                    <span class="sus-badge {{ sus }}">
+                                        <i class="bi bi-circle-fill"
+                                           style="font-size:0.5rem"></i>
+                                        {{ sus_label }}
                                     </span>
                                 </td>
-                                <td class="text-muted small">
+                                <td class="text-muted">
                                     {{ a.start_time.strftime('%d %b %Y') }}
                                 </td>
                                 <td>
                                     <a href="{{ url_for('admin.attempt_detail', attempt_id=a.id) }}"
-                                       class="btn btn-sm btn-outline-secondary">
-                                        View
+                                       class="btn-ep-secondary">
+                                        <i class="bi bi-eye"></i> View
                                     </a>
                                 </td>
                             </tr>
                             {% else %}
                             <tr>
-                                <td colspan="6" class="text-center text-muted py-3">
-                                    No attempts yet.
+                                <td colspan="6"
+                                    class="text-center text-muted py-4">
+                                    <i class="bi bi-inbox me-2"></i>
+                                    No attempts yet
                                 </td>
                             </tr>
                             {% endfor %}
@@ -155,7 +187,7 @@
                 </div>
             </div>
 
-        </main>
+        </div>
     </div>
 </div>
 {% endblock %}

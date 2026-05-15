@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Register Admin — ExamProctor{% endblock %}
+
+{% block body %}
+<div class="login-page">
+    <div class="login-card">
+
+        <div class="login-logo">
+            <i class="bi bi-person-plus"></i>
+        </div>
+
+        <h4>Create Admin Account</h4>
+        <p>You need a registration code to proceed</p>
+
+        <form method="POST" autocomplete="off">
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <div class="input-icon-wrap">
+                    <i class="bi bi-person"></i>
+                    <input type="text" name="username"
+                           class="form-control"
+                           placeholder="Choose a username" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-icon-wrap">
+                    <i class="bi bi-lock"></i>
+                    <input type="password" name="password"
+                           class="form-control"
+                           placeholder="Min 6 characters" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Registration Code</label>
+                <div class="input-icon-wrap">
+                    <i class="bi bi-key"></i>
+                    <input type="password" name="secret_code"
+                           class="form-control"
+                           placeholder="Enter secret code" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login">
+                <i class="bi bi-person-check"></i>
+                Create Account
+            </button>
+
+        </form>
+
+        <p style="color:rgba(255,255,255,0.4);text-align:center;
+                  font-size:0.78rem;margin-top:1.2rem;margin-bottom:0">
+            Already have an account?
+            <a href="{{ url_for('auth.login') }}"
+               style="color:rgba(255,255,255,0.7)">Sign in</a>
+        </p>
+
+    </div>
+</div>
+{% endblock %}

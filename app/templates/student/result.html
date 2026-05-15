@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Result — ExamProctor{% endblock %}
+
+{% block body %}
+<div class="result-page">
+    <div class="result-card">
+
+        <div class="result-header">
+            {% if attempt.suspicion_score >= 25 %}
+                <div class="result-icon danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+            {% elif attempt.suspicion_score >= 10 %}
+                <div class="result-icon warning">
+                    <i class="bi bi-exclamation-circle-fill"></i>
+                </div>
+            {% else %}
+                <div class="result-icon success">
+                    <i class="bi bi-check-circle-fill"></i>
+                </div>
+            {% endif %}
+
+            <h5 style="font-weight:700;margin-bottom:0.2rem">
+                Exam Submitted
+            </h5>
+            <p class="text-muted" style="font-size:0.85rem;margin:0">
+                {{ attempt.exam.title }}
+            </p>
+        </div>
+
+        <div class="p-4">
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <div class="score-box" style="background:#E8F2F0">
+                        <div class="score-value" style="color:#1A5C52">
+                            {{ attempt.score }}/{{ total }}
+                        </div>
+                        <div class="score-label" style="color:#1A5C52">
+                            Your Score
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    {% if attempt.suspicion_score < 10 %}
+                        {% set sus = "Low" %}
+                        {% set sus_bg = "#D4EDDA" %}
+                        {% set sus_color = "#1A6B3C" %}
+                    {% elif attempt.suspicion_score < 25 %}
+                        {% set sus = "Medium" %}
+                        {% set sus_bg = "#FFF3CD" %}
+                        {% set sus_color = "#856404" %}
+                    {% else %}
+                        {% set sus = "High" %}
+                        {% set sus_bg = "#FDECEA" %}
+                        {% set sus_color = "#7B1A1A" %}
+                    {% endif %}
+                    <div class="score-box"
+                         style="background:{{ sus_bg }}">
+                        <div class="score-value"
+                             style="color:{{ sus_color }}">
+                            {{ sus }}
+                        </div>
+                        <div class="score-label"
+                             style="color:{{ sus_color }}">
+                            Suspicion
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center text-muted mb-4"
+                 style="font-size:0.82rem">
+                <i class="bi bi-clock me-1"></i>
+                Time taken:
+                {% if attempt.end_time %}
+                    {{ ((attempt.end_time - attempt.start_time)
+                        .total_seconds() / 60) | int }} minutes
+                {% else %}—{% endif %}
+            </div>
+
+            <a href="{{ url_for('student.enter_exam') }}"
+               class="btn-ep-primary w-100 justify-content-center py-2">
+                <i class="bi bi-arrow-left-circle"></i>
+                Back to Exam Entry
+            </a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

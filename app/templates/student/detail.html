@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Attempt Detail — ExamProctor{% endblock %}
+
+{% block body %}
+<div class="container py-4" style="max-width:860px">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="section-heading mb-0">Attempt Detail</h5>
+        <a href="{{ url_for('admin.dashboard') }}"
+           class="btn btn-outline-secondary">← Dashboard</a>
+    </div>
+
+    <!-- Summary -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm"
+                 style="border-top:3px solid #1A5C52">
+                <div class="fw-bold" style="color:#1A5C52">
+                    {{ attempt.student.name }}
+                </div>
+                <div class="text-muted small">
+                    {{ attempt.student.roll_number }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm"
+                 style="border-top:3px solid #B5451B">
+                <div class="fw-bold" style="color:#B5451B">
+                    {{ attempt.exam.title }}
+                </div>
+                <div class="text-muted small">
+                    {{ attempt.exam.duration }} min exam
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center p-3 shadow-sm"
+                 style="border-top:3px solid #1A5C52">
+                <div class="fs-3 fw-bold" style="color:#1A5C52">
+                    {{ attempt.score }}
+                </div>
+                <div class="text-muted small">MCQ Score</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            {% if attempt.suspicion_score < 10 %}
+                {% set sus = "Low" %}
+                {% set sus_color = "#1A6B3C" %}
+            {% elif attempt.suspicion_score < 25 %}
+                {% set sus = "Medium" %}
+                {% set sus_color = "#856404" %}
+            {% else %}
+                {% set sus = "High" %}
+                {% set sus_color = "#7B1A1A" %}
+            {% endif %}
+            <div class="card text-center p-3 shadow-sm"
+                 style="border-top:3px solid {{ sus_color }}">
+                <div class="fs-3 fw-bold" style="color:{{ sus_color }}">
+                    {{ attempt.suspicion_score }}
+                </div>
+                <div class="text-muted small">
+                    Suspicion Score ({{ sus }})
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timing -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <div class="text-muted small">Started</div>
+                    <div class="fw-semibold">
+                        {{ attempt.start_time.strftime('%d %b %Y, %I:%M:%S %p') }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-muted small">Submitted</div>
+                    <div class="fw-semibold">
+                        {{ attempt.end_time.strftime('%d %b %Y, %I:%M:%S %p')
+                           if attempt.end_time else '—' }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-muted small">Time Taken</div>
+                    <div class="fw-semibold">
+                        {% if attempt.end_time %}
+                            {{ ((attempt.end_time - attempt.start_time)
+                                .total_seconds() / 60) | int }} min
+                        {% else %}—{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Logs -->
+    <div class="card shadow-sm">
+        <div class="card-header fw-bold text-white"
+             style="background:#7B1A1A">
+            Activity Logs ({{ logs | length }} events)
+        </div>
+        <div class="card-body p-0">
+            <table class="table mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Event</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td class="text-muted small">{{ loop.index }}</td>
+                        <td>
+                            {% if log.event_type == "tab_switch" %}
+                                <span class="badge px-2 py-1"
+                                      style="background:#FDECEA;color:#7B1A1A">
+                                    🔀 Tab Switch
+                                </span>
+                            {% elif log.event_type == "idle" %}
+                                <span class="badge px-2 py-1"
+                                      style="background:#FFF3CD;color:#856404">
+                                    💤 Idle
+                                </span>
+                            {% else %}
+                                <span class="badge px-2 py-1"
+                                      style="background:#E8F0F8;color:#1E5C8A">
+                                    ⚡ Fast Submit
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="small text-muted">
+                            {{ log.timestamp.strftime('%H:%M:%S') }}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3"
+                            class="text-center text-muted py-3">
+                            No suspicious activity recorded.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

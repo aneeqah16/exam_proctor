@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-admin_bp = Blueprint("admin", __name__)
+proctoring_bp = Blueprint("proctoring", __name__)
 
 from . import routes
