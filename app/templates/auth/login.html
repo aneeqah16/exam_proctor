@@ -5,12 +5,11 @@
 <div class="login-page">
     <div class="login-card">
 
-        <!-- Logo -->
         <div class="login-logo">
             <i class="bi bi-shield-check"></i>
         </div>
 
-        <h4>ExamProctor</h4>
+        <h4 style="font-family:cursive">ExamProctor</h4>
         <p>Sign in to your admin account</p>
 
         <form method="POST" autocomplete="off">
@@ -40,15 +39,11 @@
 
         </form>
 
-        <p style="color:rgba(255,255,255,0.3);text-align:center;
-                  font-size:0.75rem;margin-top:1.5rem;margin-bottom:0">
-            Islamia College of Science and Commerce
-        </p>
-        <p style="color:rgba(255,255,255,0.3);text-align:center;
-          font-size:0.75rem;margin-top:0.8rem;margin-bottom:0">
+        <p style="color:rgba(255,255,255,0.4);text-align:center;
+                  font-size:0.78rem;margin-top:1.2rem;margin-bottom:0">
             Need an account?
-        <a href="{{ url_for('auth.register') }}"
-            style="color:rgba(255,255,255,0.6)">Register</a>
+            <a href="{{ url_for('auth.register') }}"
+               style="color:rgba(255,255,255,0.7)">Register</a>
         </p>
 
     </div>

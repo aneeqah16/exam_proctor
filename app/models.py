@@ -11,6 +11,8 @@ class Admin(UserMixin, db.Model):
     username      = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
     created_at    = db.Column(db.DateTime, default=datetime.utcnow)
+    is_super      = db.Column(db.Boolean, default=False)
+    is_approved   = db.Column(db.Boolean, default=False)
 
     exams = db.relationship("Exam", backref="creator", lazy=True,
                             cascade="all, delete-orphan")

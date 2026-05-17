@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Admin Approvals — ExamProctor{% endblock %}
+
+{% block body %}
+<div class="app-wrapper">
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-name">
+                <i class="bi bi-shield-check me-2"></i>ExamProctor
+            </div>
+            <div class="brand-sub">Super Admin</div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-label">Main</div>
+            <a href="{{ url_for('admin.dashboard') }}" class="nav-link">
+                <i class="bi bi-grid-1x2"></i> Dashboard
+            </a>
+            <a href="{{ url_for('admin.exams') }}" class="nav-link">
+                <i class="bi bi-journal-text"></i> Exams
+            </a>
+            <div class="nav-label mt-2">Super Admin</div>
+            <a href="{{ url_for('auth.approvals') }}" class="nav-link active">
+                <i class="bi bi-person-check"></i> Approvals
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="{{ url_for('auth.logout') }}" class="nav-link">
+                <i class="bi bi-box-arrow-left"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <div class="main-content">
+        <div class="topbar">
+            <span class="topbar-title">Admin Approvals</span>
+        </div>
+
+        <div class="page-body">
+
+            <div class="page-header">
+                <h4>Manage Admins</h4>
+                <p>Approve or reject new admin registration requests</p>
+            </div>
+
+            <!-- Pending -->
+            <div class="ep-card mb-4">
+                <div class="ep-card-header">
+                    <h6>
+                        <i class="bi bi-hourglass-split"></i>
+                        Pending Requests ({{ pending | length }})
+                    </h6>
+                </div>
+                <div class="table-responsive">
+                    <table class="ep-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Registered</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for a in pending %}
+                            <tr>
+                                <td class="fw-600">{{ a.username }}</td>
+                                <td class="text-muted">
+                                    {{ a.created_at.strftime('%d %b %Y') }}
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <form method="POST"
+                                              action="{{ url_for('auth.approve_admin', admin_id=a.id) }}">
+                                            <button class="btn-ep-primary">
+                                                <i class="bi bi-check-lg"></i>
+                                                Approve
+                                            </button>
+                                        </form>
+                                        <form method="POST"
+                                              action="{{ url_for('auth.reject_admin', admin_id=a.id) }}"
+                                              onsubmit="return confirm('Reject and delete this account?')">
+                                            <button class="btn-ep-danger">
+                                                <i class="bi bi-x-lg"></i>
+                                                Reject
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="3"
+                                    class="text-center text-muted py-4">
+                                    <i class="bi bi-check-circle me-2"
+                                       style="color:#1A6B3C"></i>
+                                    No pending requests
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Active admins -->
+            <div class="ep-card">
+                <div class="ep-card-header">
+                    <h6>
+                        <i class="bi bi-people"></i>
+                        Active Admins ({{ all_admins | length }})
+                    </h6>
+                </div>
+                <div class="table-responsive">
+                    <table class="ep-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for a in all_admins %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span style="width:30px;height:30px;
+                                                     border-radius:50%;
+                                                     background:#1A5C52;
+                                                     color:white;
+                                                     display:flex;
+                                                     align-items:center;
+                                                     justify-content:center;
+                                                     font-size:0.75rem;
+                                                     font-weight:700">
+                                            {{ a.username[0].upper() }}
+                                        </span>
+                                        <span class="fw-600">{{ a.username }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if a.is_super %}
+                                        <span class="sus-badge low">
+                                            Super Admin
+                                        </span>
+                                    {% else %}
+                                        <span class="sus-badge medium">Admin</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-muted">
+                                    {{ a.created_at.strftime('%d %b %Y') }}
+                                </td>
+                                <td>
+                                    {% if not a.is_super %}
+                                    <form method="POST"
+                                          action="{{ url_for('auth.deactivate_admin', admin_id=a.id) }}"
+                                          onsubmit="return confirm('Deactivate this admin?')">
+                                        <button class="btn-ep-danger">
+                                            <i class="bi bi-person-slash"></i>
+                                            Deactivate
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <span class="text-muted"
+                                          style="font-size:0.8rem">
+                                        Protected
+                                    </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

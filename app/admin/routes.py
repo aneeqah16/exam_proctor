@@ -6,7 +6,9 @@ from datetime import datetime
 
 from . import admin_bp
 from app import db
-from app.models import Exam, Question, Attempt, ActivityLog, Student
+from app.models import Exam, Question, Attempt, ActivityLog, Student, Admin
+import csv, io
+
 
 
 @admin_bp.route("/dashboard")
@@ -25,11 +27,12 @@ def dashboard():
                        .order_by(Attempt.start_time.desc())
                        .limit(10).all())
     return render_template("admin/dashboard.html",
-                           total_exams=total_exams,
-                           total_students=total_students,
-                           total_attempts=total_attempts,
-                           flagged=flagged,
-                           recent_attempts=recent_attempts)
+                       total_exams=total_exams,
+                       total_students=total_students,
+                       total_attempts=total_attempts,
+                       flagged=flagged,
+                       recent_attempts=recent_attempts,
+                       pending_admins=Admin.query.filter_by(is_approved=False).count())
 
 @admin_bp.route("/exams")
 @login_required
@@ -270,3 +273,67 @@ def attempt_detail(attempt_id):
         attempt=attempt,
         logs=logs
     )
+
+
+@admin_bp.route("/exams/<int:exam_id>/import-csv", methods=["GET", "POST"])
+@login_required
+def import_csv(exam_id):
+    exam = Exam.query.get_or_404(exam_id)
+
+    if request.method == "POST":
+        file = request.files.get("csv_file")
+
+        if not file or not file.filename.endswith(".csv"):
+            flash("Please upload a valid .csv file.", "danger")
+            return redirect(url_for("admin.import_csv", exam_id=exam_id))
+
+        stream  = io.StringIO(file.stream.read().decode("utf-8"), newline=None)
+        reader  = csv.DictReader(stream)
+        added   = 0
+        errors  = []
+
+        for i, row in enumerate(reader, start=2):
+            try:
+                q = Question(
+                    exam_id        = exam_id,
+                    question_text  = row["question"].strip(),
+                    option_a       = row["option_a"].strip(),
+                    option_b       = row["option_b"].strip(),
+                    option_c       = row["option_c"].strip(),
+                    option_d       = row["option_d"].strip(),
+                    correct_answer = row["correct_answer"].strip().upper()
+                )
+                if q.correct_answer not in ("A", "B", "C", "D"):
+                    errors.append(f"Row {i}: correct_answer must be A/B/C/D")
+                    continue
+                db.session.add(q)
+                added += 1
+            except KeyError as e:
+                errors.append(f"Row {i}: missing column {e}")
+
+        db.session.commit()
+
+        if added:
+            flash(f"{added} question(s) imported successfully.", "success")
+        for e in errors:
+            flash(e, "warning")
+
+        return redirect(url_for("admin.questions", exam_id=exam_id))
+
+    return render_template("admin/import_csv.html", exam=exam)
+
+@admin_bp.route("/questions/<int:q_id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_question(q_id):
+    q = Question.query.get_or_404(q_id)
+    if request.method == "POST":
+        q.question_text  = request.form.get("question_text", "").strip()
+        q.option_a       = request.form.get("option_a", "").strip()
+        q.option_b       = request.form.get("option_b", "").strip()
+        q.option_c       = request.form.get("option_c", "").strip()
+        q.option_d       = request.form.get("option_d", "").strip()
+        q.correct_answer = request.form.get("correct_answer", "A").upper()
+        db.session.commit()
+        flash("Question updated", "success")
+        return redirect(url_for("admin.questions", exam_id=q.exam_id))
+    return render_template("admin/edit_question.html", q=q)

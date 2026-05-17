@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Import Questions — ExamProctor{% endblock %}
+
+{% block body %}
+<div class="app-wrapper">
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-name">
+                <i class="bi bi-shield-check me-2"></i>ExamProctor
+            </div>
+            <div class="brand-sub">Admin Panel</div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-label">Main</div>
+            <a href="{{ url_for('admin.dashboard') }}" class="nav-link">
+                <i class="bi bi-grid-1x2"></i> Dashboard
+            </a>
+            <a href="{{ url_for('admin.exams') }}" class="nav-link active">
+                <i class="bi bi-journal-text"></i> Exams
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="{{ url_for('auth.logout') }}" class="nav-link">
+                <i class="bi bi-box-arrow-left"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <div class="main-content">
+        <div class="topbar">
+            <span class="topbar-title">
+                <a href="{{ url_for('admin.questions', exam_id=exam.id) }}"
+                   style="color:#1A5C52;text-decoration:none">
+                    <i class="bi bi-chevron-left me-1"></i>Questions
+                </a>
+                &nbsp;/&nbsp; Import CSV
+            </span>
+        </div>
+
+        <div class="page-body">
+            <div class="page-header">
+                <h4>Import Questions via CSV</h4>
+                <p>Adding to: <strong>{{ exam.title }}</strong></p>
+            </div>
+
+            <!-- Format guide -->
+            <div class="ep-card mb-4" style="max-width:680px">
+                <div class="ep-card-header">
+                    <h6><i class="bi bi-info-circle"></i> CSV Format</h6>
+                </div>
+                <div class="p-4">
+                    <p class="text-muted mb-3" style="font-size:0.88rem">
+                        Your CSV must have exactly these column headers
+                        in the first row:
+                    </p>
+                    <div style="background:#F4F6F8;border-radius:8px;
+                                padding:0.8rem 1rem;font-family:monospace;
+                                font-size:0.82rem;color:#1A5C52;
+                                overflow-x:auto;white-space:nowrap">
+                        question, option_a, option_b, option_c, option_d, correct_answer
+                    </div>
+                    <div class="mt-3"
+                         style="background:#E8F2F0;border-radius:8px;
+                                padding:0.8rem 1rem;font-family:monospace;
+                                font-size:0.78rem;color:#3D3D3D;
+                                overflow-x:auto;white-space:nowrap">
+                        What is 2+2?,1,2,4,8,C<br>
+                        Capital of India?,Mumbai,Delhi,Chennai,Kolkata,B
+                    </div>
+                    <p class="text-muted mt-3 mb-0" style="font-size:0.82rem">
+                        <i class="bi bi-lightbulb me-1" style="color:#856404"></i>
+                        <strong>correct_answer</strong> must be A, B, C, or D
+                        (the letter matching the correct option column).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Upload form -->
+            <div class="ep-card" style="max-width:680px">
+                <div class="ep-card-header">
+                    <h6><i class="bi bi-upload"></i> Upload File</h6>
+                </div>
+                <div class="p-4">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="mb-4">
+                            <label class="form-label">Select CSV File</label>
+                            <input type="file" name="csv_file"
+                                   class="form-control" accept=".csv" required>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn-ep-primary">
+                                <i class="bi bi-cloud-upload"></i>
+                                Import Questions
+                            </button>
+                            <a href="{{ url_for('admin.questions', exam_id=exam.id) }}"
+                               class="btn-ep-secondary">
+                                <i class="bi bi-x-lg"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

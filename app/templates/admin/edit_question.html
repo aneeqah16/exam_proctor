@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Edit Question — ExamProctor{% endblock %}
+
+{% block body %}
+<div class="app-wrapper">
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-name">
+                <i class="bi bi-shield-check me-2"></i>ExamProctor
+            </div>
+            <div class="brand-sub">Admin Panel</div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-label">Main</div>
+            <a href="{{ url_for('admin.dashboard') }}" class="nav-link">
+                <i class="bi bi-grid-1x2"></i> Dashboard
+            </a>
+            <a href="{{ url_for('admin.exams') }}" class="nav-link active">
+                <i class="bi bi-journal-text"></i> Exams
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="{{ url_for('auth.logout') }}" class="nav-link">
+                <i class="bi bi-box-arrow-left"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <div class="main-content">
+        <div class="topbar">
+            <span class="topbar-title">
+                <a href="{{ url_for('admin.questions', exam_id=q.exam_id) }}"
+                   style="color:#1A5C52;text-decoration:none">
+                    <i class="bi bi-chevron-left me-1"></i>Questions
+                </a>
+                &nbsp;/&nbsp; Edit Question
+            </span>
+        </div>
+
+        <div class="page-body">
+            <div class="page-header">
+                <h4>Edit Question</h4>
+            </div>
+
+            <div class="ep-card" style="max-width:680px">
+                <div class="ep-card-header">
+                    <h6><i class="bi bi-pencil-square"></i> Edit MCQ</h6>
+                </div>
+                <div class="p-4">
+                    <form method="POST">
+                        <div class="mb-4">
+                            <label class="form-label">Question Text</label>
+                            <textarea name="question_text" class="form-control"
+                                      rows="3" required>{{ q.question_text }}</textarea>
+                        </div>
+                        <div class="row g-3 mb-4">
+                            {% for opt, val in [('A', q.option_a), ('B', q.option_b),
+                                                ('C', q.option_c), ('D', q.option_d)] %}
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <span style="background:#E8F2F0;color:#1A5C52;
+                                                 padding:1px 7px;border-radius:4px;
+                                                 font-size:0.78rem;font-weight:700">
+                                        {{ opt }}
+                                    </span> Option {{ opt }}
+                                </label>
+                                <input type="text" name="option_{{ opt|lower }}"
+                                       class="form-control"
+                                       value="{{ val }}" required>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Correct Answer</label>
+                            <select name="correct_answer" class="form-select">
+                                {% for opt in ['A','B','C','D'] %}
+                                <option value="{{ opt }}"
+                                    {{ 'selected' if q.correct_answer == opt }}>
+                                    Option {{ opt }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn-ep-primary">
+                                <i class="bi bi-check-lg"></i> Save Changes
+                            </button>
+                            <a href="{{ url_for('admin.questions', exam_id=q.exam_id) }}"
+                               class="btn-ep-secondary">
+                                <i class="bi bi-x-lg"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

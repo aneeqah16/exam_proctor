@@ -1029,3 +1029,203 @@ a { text-decoration: none; }
         text-align: center;
     }
 }
+
+
+/* ── Poppins for headings and key UI elements ────────────────────── */
+
+.brand-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+
+.brand-sub {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    opacity: 0.7;
+}
+
+.page-header h4 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: #1A3D38;
+}
+
+.page-header p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+.nav-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.nav-link {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+}
+
+.topbar-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.avatar-btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+.ep-card-header h6 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.stat-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+}
+
+.btn-ep-primary,
+.btn-ep-secondary,
+.btn-ep-danger {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.ep-table thead th {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ep-table tbody td {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+}
+
+/* Login page headings */
+.login-card h4 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+.login-card p {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Delete modal */
+#deleteModal h5 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+/* Avatar dropdown */
+.avatar-dropdown-header div {
+    font-family: 'Poppins', sans-serif;
+}
+
+.avatar-dropdown a {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+}
+/* ── Mobile fixes ────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+
+    .app-wrapper {
+        overflow-x: hidden;
+    }
+
+    .main-content {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .topbar {
+        padding: 0.75rem 1rem;
+    }
+
+    .topbar-title {
+        font-size: 0.9rem;
+    }
+
+    .page-body {
+        padding: 1rem;
+    }
+
+    .page-header h4 {
+        font-size: 1.2rem;
+    }
+
+    .ep-card {
+        border-radius: 10px;
+    }
+
+    .stat-card {
+        padding: 0.85rem;
+    }
+
+    .stat-value {
+        font-size: 1.4rem;
+    }
+
+    .ep-table {
+        font-size: 0.78rem;
+    }
+
+    .btn-ep-primary,
+    .btn-ep-secondary,
+    .btn-ep-danger {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.75rem;
+    }
+
+    /* Exam page */
+    .exam-topbar {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .timer-box {
+        font-size: 0.85rem;
+    }
+
+    .question-card {
+        padding: 1rem;
+    }
+
+    /* Login page */
+    .login-card {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    /* Student entry */
+    .student-card {
+        margin: 1rem;
+    }
+}

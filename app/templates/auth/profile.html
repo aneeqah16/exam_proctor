@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}My Profile — ExamProctor{% endblock %}
+
+{% block body %}
+<div class="app-wrapper">
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-name">
+                <i class="bi bi-shield-check me-2"></i>ExamProctor
+            </div>
+            <div class="brand-sub">Admin Panel</div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-label">Main</div>
+            <a href="{{ url_for('admin.dashboard') }}" class="nav-link">
+                <i class="bi bi-grid-1x2"></i> Dashboard
+            </a>
+            <a href="{{ url_for('admin.exams') }}" class="nav-link">
+                <i class="bi bi-journal-text"></i> Exams
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="{{ url_for('auth.logout') }}" class="nav-link">
+                <i class="bi bi-box-arrow-left"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <div class="main-content">
+        <div class="topbar">
+            <span class="topbar-title">My Profile</span>
+        </div>
+
+        <div class="page-body">
+            <div class="page-header">
+                <h4>Account Settings</h4>
+                <p>Update your username or password</p>
+            </div>
+
+            <div class="ep-card" style="max-width:500px">
+                <div class="ep-card-header">
+                    <h6>
+                        <!-- Avatar circle -->
+                        <span style="width:32px;height:32px;border-radius:50%;
+                                     background:#1A5C52;color:white;
+                                     display:inline-flex;align-items:center;
+                                     justify-content:center;font-size:0.85rem;
+                                     font-weight:700;margin-right:8px">
+                            {{ current_user.username[0].upper() }}
+                        </span>
+                        {{ current_user.username }}
+                        {% if current_user.is_super %}
+                            <span class="sus-badge low ms-2">Super Admin</span>
+                        {% endif %}
+                    </h6>
+                </div>
+                <div class="p-4">
+
+                    <!-- Info block -->
+                    <div style="background:#F4F6F8;border-radius:10px;
+                                padding:1rem 1.2rem;margin-bottom:1.5rem">
+                        <div class="row g-2" style="font-size:0.85rem">
+                            <div class="col-5 text-muted">Username</div>
+                            <div class="col-7 fw-600">
+                                {{ current_user.username }}
+                            </div>
+                            <div class="col-5 text-muted">Role</div>
+                            <div class="col-7 fw-600">
+                                {{ "Super Admin" if current_user.is_super else "Admin" }}
+                            </div>
+                            <div class="col-5 text-muted">Member Since</div>
+                            <div class="col-7 fw-600">
+                                {{ current_user.created_at.strftime('%d %b %Y') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Change Username</label>
+                            <input type="text" name="username"
+                                   class="form-control"
+                                   value="{{ current_user.username }}">
+                        </div>
+                        <hr style="border-color:#E2E8F0">
+                        <p class="text-muted mb-3" style="font-size:0.82rem">
+                            Leave password fields blank to keep current password
+                        </p>
+                        <div class="mb-3">
+                            <label class="form-label">New Password</label>
+                            <input type="password" name="new_password"
+                                   class="form-control"
+                                   placeholder="Min 6 characters">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Confirm New Password</label>
+                            <input type="password" name="confirm_password"
+                                   class="form-control"
+                                   placeholder="Repeat new password">
+                        </div>
+                        <button type="submit" class="btn-ep-primary">
+                            <i class="bi bi-check-lg"></i> Save Changes
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

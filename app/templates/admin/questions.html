@@ -41,10 +41,16 @@
                 &nbsp;/&nbsp; {{ exam.title }}
             </span>
             <div class="topbar-right">
-                <a href="{{ url_for('admin.add_question', exam_id=exam.id) }}"
-                   class="btn-ep-primary">
-                    <i class="bi bi-plus-lg"></i> Add Question
-                </a>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('admin.import_csv', exam_id=exam.id) }}"
+                       class="btn-ep-secondary">
+                        <i class="bi bi-filetype-csv"></i> Import CSV
+                    </a>
+                    <a href="{{ url_for('admin.add_question', exam_id=exam.id) }}"
+                       class="btn-ep-primary">
+                        <i class="bi bi-plus-lg"></i> Add Question
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -66,13 +72,19 @@
                             <i class="bi bi-question-circle"></i>
                             Question {{ loop.index }}
                         </h6>
-                        <form method="POST"
-                              action="{{ url_for('admin.delete_question', q_id=q.id) }}"
-                              onsubmit="return confirm('Delete this question?')">
-                            <button class="btn-ep-danger">
-                                <i class="bi bi-trash"></i> Delete
-                            </button>
-                        </form>
+                        <div class="d-flex gap-2">
+                            <a href="{{ url_for('admin.edit_question', q_id=q.id) }}"
+                               class="btn-ep-secondary">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                            <form method="POST"
+                                  action="{{ url_for('admin.delete_question', q_id=q.id) }}"
+                                  onsubmit="return confirm('Delete this question?')">
+                                <button class="btn-ep-danger">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </form>
+                        </div>
                     </div>
                     <div class="p-4">
                         <p class="fw-500 mb-3" style="font-size:0.95rem">

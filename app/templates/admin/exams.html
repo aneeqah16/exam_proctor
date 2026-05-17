@@ -94,9 +94,9 @@
                                             <i class="bi bi-pencil"></i>
                                         </a>
                                         <form method="POST"
-                                              action="{{ url_for('admin.delete_exam', exam_id=e.id) }}"
-                                              class="d-inline"
-                                              onsubmit="return confirm('Delete this exam?')">
+                                            action="{{ url_for('admin.delete_exam', exam_id=e.id) }}"
+                                            class="d-inline"
+                                            onsubmit="return confirmDelete(event, '{{ e.title }}')">
                                             <button class="btn-ep-danger">
                                                 <i class="bi bi-trash"></i>
                                             </button>
@@ -121,4 +121,72 @@
         </div>
     </div>
 </div>
+<!-- Styled delete confirmation modal -->
+<div id="deleteModal" style="display:none;position:fixed;inset:0;
+     background:rgba(0,0,0,0.45);z-index:9999;
+     align-items:center;justify-content:center">
+    <div style="background:white;border-radius:16px;padding:2rem;
+                max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.2);
+                text-align:center">
+        <div style="width:60px;height:60px;border-radius:50%;
+                    background:#FDECEA;display:flex;align-items:center;
+                    justify-content:center;margin:0 auto 1rem">
+            <i class="bi bi-trash" style="font-size:1.5rem;color:#B5451B"></i>
+        </div>
+        <h5 style="font-family:cursive;font-weight:700;margin-bottom:0.4rem">
+            Delete Exam?
+        </h5>
+        <p id="deleteModalText"
+           style="color:#666;font-size:0.88rem;margin-bottom:1.5rem"></p>
+        <p style="color:#999;font-size:0.78rem;margin-bottom:1.5rem">
+            This will permanently delete the exam and all its questions
+            and attempts. This action cannot be undone.
+        </p>
+        <div class="d-flex gap-3 justify-content-center">
+            <button onclick="cancelDelete()"
+                    style="padding:0.6rem 1.5rem;border-radius:8px;
+                           border:1.5px solid #E2E8F0;background:white;
+                           font-size:0.88rem;cursor:pointer;font-weight:600">
+                Cancel
+            </button>
+            <button id="confirmDeleteBtn"
+                    style="padding:0.6rem 1.5rem;border-radius:8px;
+                           border:none;background:#B5451B;color:white;
+                           font-size:0.88rem;cursor:pointer;font-weight:600">
+                <i class="bi bi-trash me-1"></i> Yes, Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let pendingForm = null;
+
+    function confirmDelete(e, examTitle) {
+        e.preventDefault();
+        pendingForm = e.target.closest('form');
+        document.getElementById('deleteModalText').textContent =
+            'You are about to delete "' + examTitle + '".';
+        const modal = document.getElementById('deleteModal');
+        modal.style.display = 'flex';
+        return false;
+    }
+
+    function cancelDelete() {
+        pendingForm = null;
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+        if (pendingForm) {
+            document.getElementById('deleteModal').style.display = 'none';
+            pendingForm.submit();
+        }
+    });
+
+    // Close on backdrop click
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+        if (e.target === this) cancelDelete();
+    });
+</script>
 {% endblock %}

@@ -1,5 +1,3 @@
-# app/__init__.py
-
 from flask import Flask, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -26,7 +24,6 @@ def create_app():
     login_manager.login_message = "Please login first."
     login_manager.login_message_category = "warning"
 
-    # Register blueprints
     from app.auth import auth_bp
     from app.admin import admin_bp
     from app.student import student_bp
@@ -42,22 +39,15 @@ def create_app():
         return redirect(url_for("auth.login"))
 
     with app.app_context():
-
         from app.models import Admin
 
         db.create_all()
 
-        # Create default admin
         if not Admin.query.first():
-
-            admin = Admin(username="admin")
+            admin = Admin(username="admin", is_super=True, is_approved=True)
             admin.set_password("admin123")
-
             db.session.add(admin)
             db.session.commit()
-
-            print("Default admin created")
-            print("Username: admin")
-            print("Password: admin123")
+            print("Default super admin created: admin / admin123")
 
     return app
